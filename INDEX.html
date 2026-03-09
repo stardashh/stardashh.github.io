@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StarDash</title>
+  <style>
+    :root{
+      --bg1:#080d1f;
+      --bg2:#111733;
+      --bg3:#1a1140;
+      --panel:rgba(255,255,255,0.08);
+      --panel-strong:rgba(255,255,255,0.12);
+      --border:rgba(255,255,255,0.14);
+      --text:#f7f4ff;
+      --muted:#cfc9ef;
+      --pink:#ff8bd7;
+      --blue:#73b8ff;
+      --purple:#9d7bff;
+      --mint:#8ff8d8;
+      --gold:#ffd978;
+      --shadow:0 20px 60px rgba(0,0,0,0.35);
+      --radius:24px;
+    }
+
+    *{
+      box-sizing:border-box;
+      margin:0;
+      padding:0;
+      scroll-behavior:smooth;
+    }
+
+    body{
+      font-family:Arial, Helvetica, sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at 10% 10%, rgba(255,139,215,0.12), transparent 25%),
+        radial-gradient(circle at 85% 20%, rgba(115,184,255,0.14), transparent 20%),
+        radial-gradient(circle at 30% 85%, rgba(157,123,255,0.15), transparent 22%),
+        linear-gradient(180deg, var(--bg1), var(--bg2) 45%, var(--bg3));
+      min-height:100vh;
+      overflow-x:hidden;
+    }
+
+    .stars,
+    .stars::before,
+    .stars::after{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+    }
+
+    .stars::before,
+    .stars::after{
+      content:"";
+      background-image:
+        radial-gradient(2px 2px at 20px 30px, rgba(255,255,255,0.95), transparent),
+        radial-gradient(2px 2px at 120px 140px, rgba(255,214,245,0.9), transparent),
+        radial-gradient(1.5px 1.5px at 220px 80px, rgba(115,184,255,0.9), transparent),
+        radial-gradient(2px 2px at 360px 170px, rgba(255,255,255,0.95), transparent),
+        radial-gradient(2px 2px at 480px 50px, rgba(255,217,120,0.85), transparent),
+        radial-gradient(1.6px 1.6px at 620px 120px, rgba(255,255,255,0.95), transparent),
+        radial-gradient(2px 2px at 760px 200px, rgba(143,248,216,0.9), transparent),
+        radial-gradient(1.5px 1.5px at 900px 90px, rgba(255,255,255,0.95), transparent);
+      background-size:1000px 300px;
+      opacity:0.7;
+      animation:drift 22s linear infinite;
+    }
+
+    .stars::after{
+      opacity:0.35;
+      transform:scale(1.1);
+      animation-duration:36s;
+    }
+
+    @keyframes drift{
+      from{transform:translateY(0)}
+      to{transform:translateY(35px)}
+    }
+
+    .orb{
+      position:fixed;
+      width:300px;
+      height:300px;
+      border-radius:50%;
+      filter:blur(60px);
+      opacity:0.18;
+      pointer-events:none;
+      z-index:0;
+      animation:floatOrb 12s ease-in-out infinite;
+    }
+
+    .orb1{
+      top:8%;
+      left:-60px;
+      background:var(--pink);
+    }
+
+    .orb2{
+      right:-80px;
+      top:35%;
+      background:var(--blue);
+      animation-delay:2s;
+    }
+
+    .orb3{
+      left:22%;
+      bottom:-100px;
+      background:var(--purple);
+      animation-delay:4s;
+    }
+
+    @keyframes floatOrb{
+      0%,100%{transform:translateY(0) translateX(0)}
+      50%{transform:translateY(-20px) translateX(15px)}
+    }
+
+    .hidden{
+      display:none !important;
+    }
+
+    .welcome-screen{
+      min-height:100vh;
+      display:grid;
+      place-items:center;
+      padding:24px;
+      position:relative;
+      z-index:1;
+    }
+
+    .welcome-card{
+      width:min(760px,100%);
+      background:linear-gradient(180deg, rgba(255,255,255,0.1), rgba(255,255,255,0.06));
+      border:1px solid var(--border);
+      border-radius:32px;
+      box-shadow:var(--shadow);
+      padding:34px;
+      text-align:center;
+      backdrop-filter:blur(14px);
+      animation:popIn 0.7s ease;
+    }
+
+    @keyframes popIn{
+      from{opacity:0; transform:translateY(16px) scale(0.98)}
+      to{opacity:1; transform:translateY(0) scale(1)}
+    }
+
+    .brand{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:10px 16px;
+      border-radius:999px;
+      background:rgba(255,255,255,0.08);
+      border:1px solid rgba(255,255,255,0.12);
+      margin-bottom:18px;
+      font-weight:700;
+      letter-spacing:0.4px;
+    }
+
+    .brand .spark{
+      color:var(--gold);
+      font-size:20px;
+      animation:twinkle 2s infinite;
+    }
+
+    @keyframes twinkle{
+      0%,100%{opacity:1; transform:scale(1)}
+      50%{opacity:0.55; transform:scale(1.12)}
+    }
+
+    .welcome-card h1{
+      font-size:clamp(2rem, 5vw, 4rem);
+      line-height:1.04;
+      margin-bottom:14px;
+      background:linear-gradient(90deg, #fff, #ffd4f1 30%, #c8d8ff 75%, #fff);
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+    }
+
+    .welcome-card p{
+      color:var(--muted);
+      font-size:1.05rem;
+      line-height:1.8;
+      max-width:620px;
+      margin:0 auto;
+    }
+
+    .welcome-badges{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      justify-content:center;
+      margin:22px 0 26px;
+    }
+
+    .welcome-badges span{
+      padding:10px 14px;
+      border-radius:999px;
+      background:rgba(255,255,255,0.08);
+      border:1px solid rgba(255,255,255,0.12);
+      color:#f7e7ff;
+      font-size:0.95rem;
+      animation:lift 4s ease-in-out infinite;
+    }
+
+    .welcome-badges span:nth-child(2){animation-delay:0.4s}
+    .welcome-badges span:nth-child(3){animation-delay:0.8s}
+    .welcome-badges span:nth-child(4){animation-delay:1.2s}
+
+    @keyframes lift{
+      0%,100%{transform:translateY(0)}
+      50%{transform:translateY(-6px)}
+    }
+
+    .welcome-form{
+      margin-top:12px;
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+      max-width:420px;
+      margin-inline:auto;
+    }
+
+    .welcome-form input{
+      width:100%;
+      padding:15px 16px;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,0.12);
+      background:rgba(7,11,22,0.7);
+      color:var(--text);
+      font-size:1rem;
+      outline:none;
+      transition:0.2s ease;
+    }
+
+    .welcome-form input:focus{
+      border-color:rgba(157,123,255,0.8);
+      box-shadow:0 0 0 4px rgba(157,123,255,0.12);
+    }
+
+    .btn{
+      padding:15px 18px;
+      border:none;
+      border-radius:16px;
+      font-weight:800;
+      cursor:pointer;
+      color:white;
+      background:linear-gradient(135deg, var(--pink), var(--purple), var(--blue));
+      box-shadow:0 12px 32px rgba(123,110,255,0.28);
+      transition:0.22s ease;
+    }
+
+    .btn:hover{
+      transform:translateY(-2px) scale(1.01);
+      box-shadow:0 18px 38px rgba(123,110,255,0.35);
+    }
+
+    .welcome-note{
+      margin-top:12px;
+      color:#d8cff6;
+      font-size:0.92rem;
+    }
+
+    .app{
+      position:relative;
+      z-index:1;
+      animation:fadeIn 0.6s ease;
+    }
+
+    @keyframes fadeIn{
+      from{opacity:0}
+      to{opacity:1}
+    }
+
+    header{
+      position:sticky;
+      top:0;
+      z-index:20;
+      backdrop-filter:blur(12px);
+      background:rgba(9,12,26,0.72);
+      border-bottom:1px solid rgba(255,255,255,0.08);
+    }
+
+    .nav-wrap{
+      max-width:1180px;
+      margin:0 auto;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      padding:18px 20px;
+    }
+
+    .logo{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      font-weight:800;
+      font-size:1.3rem;
+      color:#ffe9f8;
+    }
+
+    .logo-badge{
+      width:42px;
+      height:42px;
+      border-radius:14px;
+      display:grid;
+      place-items:center;
+      background:linear-gradient(135deg, rgba(255,139,215,0.28), rgba(115,184,255,0.28));
+      border:1px solid rgba(255,255,255,0.15);
+      box-shadow:0 10px 24px rgba(0,0,0,0.22);
+    }
+
+    .nav{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      justify-content:flex-end;
+    }
+
+    .nav button{
+      padding:10px 14px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,0.12);
+      background:rgba(255,255,255,0.08);
+      color:white;
+      cursor:pointer;
+      transition:0.2s ease;
+    }
+
+    .nav button:hover{
+      transform:translateY(-1px);
+      background:rgba(255,255,255,0.14);
+    }
+
+    main{
+      max-width:1180px;
+      margin:0 auto;
+      padding:28px 20px 60px;
+    }
+
+    .hero{
+      display:grid;
+      grid-template-columns:1.15fr 0.85fr;
+      gap:22px;
+      align-items:stretch;
+      margin-bottom:26px;
+    }
+
+    .panel{
+      background:linear-gradient(180deg, rgba(255,255,255,0.1), rgba(255,255,255,0.06));
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:24px;
+      backdrop-filter:blur(10px);
+      position:relative;
+      overflow:hidden;
+    }
+
+    .panel::after{
+      content:"";
+      position:absolute;
+      width:160px;
+      height:160px;
+      right:-40px;
+      top:-40px;
+      border-radius:50%;
+      background:radial-gradient(circle, rgba(255,255,255,0.12), transparent 65%);
+      pointer-events:none;
+    }
+
+    .hero-title{
+      font-size:clamp(2rem, 4vw, 3.4rem);
+      line-height:1.07;
+      margin-bottom:12px;
+    }
+
+    .hero-title span{
+      background:linear-gradient(90deg, #fff, #ffd7ef, #b7d4ff);
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+    }
+
+    .hero p{
+      color:var(--muted);
+      line-height:1.75;
+      margin-bottom:16px;
+    }
+
+    .chip-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:16px;
+    }
+
+    .chip{
+      padding:10px 14px;
+      border-radius:999px;
+      background:rgba(255,255,255,0.08);
+      border:1px solid rgba(255,255,255,0.12);
+      font-size:0.92rem;
+      animation:floatChip 5s ease-in-out infinite;
+    }
+
+    .chip:nth-child(2){animation-delay:0.5s}
+    .chip:nth-child(3){animation-delay:1s}
+    .chip:nth-child(4){animation-delay:1.5s}
+
+    @keyframes floatChip{
+      0%,100%{transform:translateY(0)}
+      50%{transform:translateY(-5px)}
+    }
+
+    .hero-side h2{
+      margin-bottom:8px;
+      color:#ffe7fa;
+    }
+
+    .name-pill{
+      display:inline-block;
+      margin:10px 0 14px;
+      padding:12px 16px;
+      border-radius:999px;
+      background:linear-gradient(135deg, rgba(255,139,215,0.16), rgba(115,184,255,0.14));
+      border:1px solid rgba(255,255,255,0.14);
+      font-weight:800;
+      color:#fff;
+    }
+
+    .mini-list{
+      display:grid;
+      gap:12px;
+      margin-top:12px;
+    }
+
+    .mini-item{
+      padding:14px;
+      border-radius:18px;
+      background:rgba(255,255,255,0.06);
+      border:1px solid rgba(255,255,255,0.1);
+    }
+
+    .mini-item b{
+      display:block;
+      margin-bottom:5px;
+      color:#ffe9f7;
+    }
+
+    section{
+      margin-top:30px;
+    }
+
+    .section-head{
+      margin-bottom:16px;
+    }
+
+    .section-head h2{
+      font-size:1.9rem;
+      margin-bottom:8px;
+      color:#fff1fb;
+    }
+
+    .section-head p{
+      color:var(--muted);
+      line-height:1.7;
+    }
+
+    .grid-3{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:18px;
+    }
+
+    .grid-2{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:18px;
+    }
+
+    .card{
+      background:rgba(255,255,255,0.08);
+      border:1px solid rgba(255,255,255,0.12);
+      border-radius:22px;
+      padding:20px;
+      box-shadow:var(--shadow);
+      transition:0.24s ease;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .card::before{
+      content:"";
+      position:absolute;
+      inset:auto auto 0 0;
+      width:100%;
+      height:2px;
+      background:linear-gradient(90deg, var(--pink), var(--purple), var(--blue));
+      opacity:0.7;
+    }
+
+    .card:hover{
+      transform:translateY(-6px);
+      background:rgba(255,255,255,0.11);
+    }
+
+    .card h3{
+      color:#ffe4f8;
+      margin-bottom:10px;
+      font-size:1.15rem;
+    }
+
+    .card p,
+    .card li{
+      color:#ddd8f4;
+      line-height:1.7;
+      font-size:0.98rem;
+    }
+
+    .card ul{
+      padding-left:18px;
+      display:grid;
+      gap:4px;
+    }
+
+    .cta-banner{
+      margin-top:28px;
+      padding:24px;
+      border-radius:28px;
+      background:linear-gradient(135deg, rgba(255,139,215,0.16), rgba(115,184,255,0.14), rgba(157,123,255,0.14));
+      border:1px solid rgba(255,255,255,0.14);
+      box-shadow:var(--shadow);
+      text-align:center;
+    }
+
+    .cta-banner h3{
+      font-size:1.6rem;
+      margin-bottom:8px;
+      color:#fff1fb;
+    }
+
+    .cta-banner p{
+      color:#dfd8f8;
+      line-height:1.7;
+      max-width:740px;
+      margin:0 auto;
+    }
+
+    .coming-soon{
+      display:none;
+      margin-top:16px;
+      padding:18px;
+      border-radius:18px;
+      background:rgba(255,255,255,0.08);
+      border:1px solid rgba(255,255,255,0.12);
+      color:#fff;
+      font-weight:700;
+      text-align:center;
+      animation:flashIn 0.35s ease;
+    }
+
+    @keyframes flashIn{
+      from{opacity:0; transform:scale(0.98)}
+      to{opacity:1; transform:scale(1)}
+    }
+
+    footer{
+      max-width:1180px;
+      margin:34px auto 28px;
+      padding:0 20px;
+      position:relative;
+      z-index:1;
+    }
+
+    .footer-card{
+      padding:24px;
+      border-radius:24px;
+      background:rgba(255,255,255,0.08);
+      border:1px solid rgba(255,255,255,0.12);
+      box-shadow:var(--shadow);
+      text-align:center;
+    }
+
+    .footer-card p{
+      color:#ddd7f2;
+      line-height:1.8;
+      margin-bottom:8px;
+    }
+
+    .footer-strong{
+      color:#fff1fb;
+      font-weight:800;
+    }
+
+    @media (max-width: 980px){
+      .hero{
+        grid-template-columns:1fr;
+      }
+      .grid-3,
+      .grid-2{
+        grid-template-columns:1fr;
+      }
+      .nav-wrap{
+        flex-direction:column;
+        align-items:flex-start;
+      }
+      .nav{
+        width:100%;
+        justify-content:flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="stars"></div>
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="orb orb3"></div>
+
+  <div class="welcome-screen" id="welcomeScreen">
+    <div class="welcome-card">
+      <div class="brand"><span class="spark">✦</span> stardash</div>
+
+      <h1>your money universe starts here</h1>
+
+      <p>
+        learn how to make money, save money, spot scams, find smarter deals,
+        build better habits, and level up your money brain in a cute cosmic space.
+      </p>
+
+      <div class="welcome-badges">
+        <span>money tips</span>
+        <span>saving goals</span>
+        <span>safer online habits</span>
+        <span>deal hunting</span>
+      </div>
+
+      <div class="welcome-form">
+        <input id="nicknameInput" type="text" maxlength="24" placeholder="enter your name or nickname" />
+        <button class="btn" onclick="enterStarDash()">enter stardash</button>
+      </div>
+
+      <div class="welcome-note">
+        your name stays only in this browser session.
+      </div>
+    </div>
+  </div>
+
+  <div class="app hidden" id="app">
+    <header>
+      <div class="nav-wrap">
+        <div class="logo">
+          <div class="logo-badge">✦</div>
+          <div>StarDash</div>
+        </div>
+
+        <div class="nav">
+          <button onclick="goTo('make')">make money</button>
+          <button onclick="goTo('save')">save money</button>
+          <button onclick="goTo('safe')">stay safe</button>
+          <button onclick="goTo('deals')">better deals</button>
+          <button onclick="goTo('habits')">money habits</button>
+          <button onclick="goTo('tutors')">learning tutors</button>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="panel">
+          <h1 class="hero-title">welcome to <span>stardash</span>, <span id="heroName">friend</span> ✨</h1>
+          <p>
+            this is your sparkly money-help universe where you can learn practical ways
+            to earn, save, protect, and use money smarter. no dusty boring vibes.
+            just real help, cleaner habits, and better choices.
+          </p>
+
+          <div class="chip-row">
+            <div class="chip">earn smarter</div>
+            <div class="chip">save better</div>
+            <div class="chip">avoid scams</div>
+            <div class="chip">shop clever</div>
+          </div>
+        </div>
+
+        <div class="panel hero-side">
+          <h2>your stardash mission</h2>
+          <div class="name-pill" id="sideName">hello, friend</div>
+
+          <div class="mini-list">
+            <div class="mini-item">
+              <b>step 1</b>
+              learn a few money rules that actually help.
+            </div>
+            <div class="mini-item">
+              <b>step 2</b>
+              stop money leaks and scam nonsense.
+            </div>
+            <div class="mini-item">
+              <b>step 3</b>
+              build habits that make future you richer and calmer.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="make">
+        <div class="section-head">
+          <h2>how to make money</h2>
+          <p>realistic ideas that are safer and more useful than random get-rich-fast nonsense.</p>
+        </div>
+
+        <div class="grid-3">
+          <div class="card">
+            <h3>small jobs that add up</h3>
+            <ul>
+              <li>pet sitting or dog walking</li>
+              <li>helping family or neighbors with tech</li>
+              <li>cleaning, organizing, or helping at events</li>
+              <li>babysitting if you are trusted and old enough</li>
+              <li>watering plants while someone is away</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <h3>sell your skills</h3>
+            <ul>
+              <li>simple poster design</li>
+              <li>editing short videos</li>
+              <li>typing notes neatly</li>
+              <li>making study guides</li>
+              <li>helping with presentations</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <h3>sell what you do not use</h3>
+            <ul>
+              <li>old books</li>
+              <li>clothes in good condition</li>
+              <li>unused accessories</li>
+              <li>gadgets you no longer need</li>
+              <li>decor or stationery bundles</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <h3>how to price things better</h3>
+            <p>
+              check what similar items cost, keep your price fair, and use clear photos.
+              a good photo and honest description can make something sell way faster.
+            </p>
+          </div>
+
+          <div class="card">
+            <h3>how to avoid fake money promises</h3>
+            <p>
+              if something says “guaranteed fast cash” or asks you to pay first to earn later,
+              step back. real money usually comes from time, effort, skill, or patience.
+            </p>
+          </div>
+
+          <div class="card">
+            <h3>build a mini side-hustle brain</h3>
+            <p>
+              think of problems people have. then think of how you can solve one small problem
+              in a simple way. money often follows usefulness.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section id="save">
+        <div class="section-head">
+          <h2>how to save money</h2>
+          <p>saving does not have to feel miserable. it can feel like powering up your future self.</p>
+        </div>
+
+        <div class="grid-3">
+          <div class="card">
+            <h3>the 24-hour rule</h3>
+            <p>
+              want something random? wait 24 hours. if you still want it tomorrow,
+              decide again. this kills a lot of impulse buys.
+            </p>
+          </div>
+
+          <div class="card">
+            <h3>pay yourself first</h3>
+            <p>
+              when money comes in, move a little bit aside before spending.
+              even tiny amounts count. small savings still build momentum.
+            </p>
+          </div>
+
+          <div class="card">
+            <h3>spot money leaks</h3>
+            <p>
+              snacks, delivery fees, game purchases, and small “just this once” spending
+              can quietly eat your money. leaks are sneaky.
+            </p>
+          </div>
+
+          <div class="card">
+            <h3>save with a goal</h3>
+            <p>
+              saving is easier when it has a face. headphones, a tablet case, a gift,
+              emergency money, or a bigger future plan.
+            </p>
+          </div>
+
+          <div class="card">
+            <h3>needs vs wants check</h3>
+            <p>
+              ask yourself: do i need this, want this, or just want the feeling of buying something?
+              that one question saves a lot.
+            </p>
+          </div>
+
+          <div class="card">
+            <h3>make saving feel fun</h3>
+            <p>
+              try a no-spend day, coin jar, weekly challenge, or visual tracker.
+              when it feels like a game, it gets easier.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section id="safe">
+        <div class="section-head">
+          <h2>how to stay safe with money</h2>
+          <p>protecting your money matters just as much as earning it.</p>
+        </div>
+
+        <div class="grid-3">
+          <div class="card">
+            <h3>prevent hacking</h3>
+            <ul>
+              <li>use strong passwords</li>
+              <li>do not reuse the same password everywhere</li>
+              <li>turn on 2-step verification if possible</li>
+              <li>do not click weird links from random messages</li>
+              <li>update apps and devices when needed</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <h3>bank scam red flags</h3>
+            <ul>
+              <li>panic messages saying act now</li>
+              <li>someone asking for your pin or otp code</li>
+              <li>fake websites with weird spelling</li>
+              <li>promises that sound too good to be true</li>
+              <li>people asking for gift cards as payment</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <h3>safe online shopping</h3>
+            <ul>
+              <li>check reviews first</li>
+              <li>look for secure checkout</li>
+              <li>compare site names carefully</li>
+              <li>be suspicious of giant discounts</li>
+              <li>never rush because of fake countdown pressure</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <h3>how to be harder to scam</h3>
+            <p>
+              slow down. scammers love speed, panic, and confusion. if a message pushes you to rush,
+              that is your sign to pause and verify it first.
+            </p>
+          </div>
+
+          <div class="card">
+            <h3>how to check if something is real</h3>
+            <p>
+              go directly to the real website yourself instead of using the link in a message.
+              verify account alerts in the official app or official site.
+            </p>
+          </div>
+
+          <div class="card">
+            <h3>money safety rule</h3>
+            <p>
+              never share passwords, pin numbers, one-time codes, or private banking details with anyone.
+              real support should not need your secret codes.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section id="deals">
+        <div class="section-head">
+          <h2>better deals and coupon tricks</h2>
+          <p>paying less without getting trapped by fake “savings” is a whole skill.</p>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <h3>how to get better deals</h3>
+            <ul>
+              <li>compare at least 3 stores</li>
+              <li>check if the sale price is actually lower than normal</li>
+              <li>buy off-season when possible</li>
+              <li>look at the cost per item, not just the total price</li>
+              <li>free shipping can matter more than a tiny discount</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <h3>coupon code tips</h3>
+            <ul>
+              <li>try newsletter welcome offers</li>
+              <li>look for student discounts if they apply</li>
+              <li>test shipping codes first</li>
+              <li>avoid shady coupon sites asking weird info</li>
+              <li>stack discounts only when the store allows it</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <h3>fake savings trap</h3>
+            <p>
+              buying something you did not need just because it was “30% off” still means money left your pocket.
+              a real deal helps you, not just the store.
+            </p>
+          </div>
+
+          <div class="card">
+            <h3>how to shop smarter</h3>
+            <p>
+              use a list, set a spending cap, and know what you are willing to pay before you start browsing.
+              shopping without a limit can turn into chaos glitter.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section id="habits">
+        <div class="section-head">
+          <h2>money habits that actually help</h2>
+          <p>tiny habits are the secret stairs to bigger progress.</p>
+        </div>
+
+        <div class="grid-3">
+          <div class="card">
+            <h3>weekly check-in</h3>
+            <p>
+              spend 5 minutes each week checking what came in, what went out, and what felt unnecessary.
+              awareness is powerful.
+            </p>
+          </div>
+
+          <div class="card">
+            <h3>budget in simple buckets</h3>
+            <p>
+              you do not need a complicated spreadsheet. try buckets like needs, wants, savings, and surprise costs.
+            </p>
+          </div>
+
+          <div class="card">
+            <h3>leave room for fun</h3>
+            <p>
+              money plans work better when they are realistic. if there is zero fun money, people often break the plan.
+            </p>
+          </div>
+
+          <div class="card">
+            <h3>do not compare your life to other people online</h3>
+            <p>
+              flashy spending on social media can make normal life feel boring.
+              your money plan should fit your real life, not someone else’s highlight reel.
+            </p>
+          </div>
+
+          <div class="card">
+            <h3>learn before you spend big</h3>
+            <p>
+              before buying something expensive, read reviews, compare options, and ask if it solves a real problem.
+            </p>
+          </div>
+
+          <div class="card">
+            <h3>protect future you</h3>
+            <p>
+              even a small emergency cushion can make stressful moments less scary. future you deserves backup.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section id="tutors">
+        <div class="section-head">
+          <h2>learning tutors</h2>
+          <p>extra help is on the way.</p>
+        </div>
+
+        <div class="cta-banner">
+          <h3>want learning tutors?</h3>
+          <p>
+            press the button below to open the tutors area.
+          </p>
+          <button class="btn" style="margin-top:16px;" onclick="showTutorsComingSoon()">open tutors</button>
+          <div class="coming-soon" id="comingSoonBox">coming soon!!!</div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="footer-card">
+        <p class="footer-strong">© 2026 StarDash</p>
+        <p>IG: @jshctz.mp3</p>
+        <p>TikTok: @jshctz.mp3</p>
+        <p>more updates coming soon!!!!</p>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    function enterStarDash() {
+      const input = document.getElementById("nicknameInput");
+      const rawName = input.value.trim();
+
+      if (!rawName) {
+        input.focus();
+        input.placeholder = "please enter your name or nickname first";
+        return;
+      }
+
+      const safeName = rawName
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .slice(0, 24);
+
+      sessionStorage.setItem("stardash_name", safeName);
+
+      document.getElementById("heroName").innerHTML = safeName;
+      document.getElementById("sideName").innerHTML = "hello, " + safeName;
+      document.getElementById("welcomeScreen").classList.add("hidden");
+      document.getElementById("app").classList.remove("hidden");
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function goTo(id) {
+      document.getElementById(id).scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    function showTutorsComingSoon() {
+      const box = document.getElementById("comingSoonBox");
+      box.style.display = "block";
+    }
+
+    window.addEventListener("load", () => {
+      const savedName = sessionStorage.getItem("stardash_name");
+      if (savedName) {
+        document.getElementById("heroName").innerHTML = savedName;
+        document.getElementById("sideName").innerHTML = "hello, " + savedName;
+        document.getElementById("welcomeScreen").classList.add("hidden");
+        document.getElementById("app").classList.remove("hidden");
+      }
+    });
+  </script>
+</body>
+</html>
