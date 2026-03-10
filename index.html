@@ -3,87 +3,49 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>StarDash</title>
+<title>StarDash Update</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
 body {
   margin:0;
   font-family:'Press Start 2P', monospace;
-  background:#1b0b3b;
+  background: #1b0b3b;
   color:#fff;
   display:flex;
   flex-direction:column;
+  justify-content:center;
+  align-items:center;
   min-height:100vh;
-  overflow-x:hidden;
+  text-align:center;
 }
 
 header{
-  background:linear-gradient(90deg,#3c096c,#5a189a,#7b2cbf);
-  padding:20px;
-  text-align:center;
   font-size:2em;
-  color:#fff;
-  text-shadow:0 0 10px #ff6eb4;
-}
-
-nav{
-  display:flex;
-  justify-content:center;
-  background:#2c1053;
-  flex-wrap:wrap;
-}
-nav a{
-  color:#fff;
-  text-decoration:none;
-  padding:15px 25px;
-}
-nav a:hover{
   color:#ff6eb4;
+  margin-bottom:20px;
+  text-shadow: 0 0 10px #ff85d0;
 }
 
-.page{
-  display:none;
-  flex:1;
-  padding:20px;
-  text-align:center;
-}
-.active{
-  display:block;
-  animation:fadeIn 0.5s ease-in-out;
-}
-@keyframes fadeIn{
-  from{opacity:0;}
-  to{opacity:1;}
-}
-
-#artCanvas{
-  border:2px solid #ff6eb4;
-  background:#1b0b3b;
-  cursor:crosshair;
+p{
+  font-size:0.8em;
+  max-width:500px;
+  line-height:1.5;
 }
 
 button{
+  margin-top:20px;
   background:#ff6eb4;
   color:#fff;
   border:none;
   padding:10px 15px;
-  margin-top:10px;
   cursor:pointer;
 }
+
 button:hover{
   background:#ff85d0;
 }
 
-footer{
-  background:#2c1053;
-  text-align:center;
-  padding:10px;
-  font-size:0.8em;
-  color:#fff;
-}
-
-/* star background */
 .stars{
   position:fixed;
   width:100%;
@@ -104,75 +66,14 @@ footer{
   0%,100%{opacity:0.8;}
   50%{opacity:0.2;}
 }
-
-.gameBox{
-  border:2px dashed #ff6eb4;
-  margin:10px auto;
-  padding:10px;
-  max-width:600px;
-  text-align:left;
-}
 </style>
 </head>
 <body>
 
 <div class="stars" id="stars"></div>
 
-<header>stardash</header>
-
-<nav>
-<a href="#" onclick="showPage('art')">Art</a>
-<a href="#" onclick="showPage('games')">Games</a>
-<a href="#" onclick="showPage('yap')">Yap</a>
-</nav>
-
-<div id="art" class="page active">
-<h2>doodle & draw</h2>
-<canvas id="artCanvas" width="600" height="400"></canvas><br>
-<button onclick="clearCanvas()">clear</button>
-</div>
-
-<div id="games" class="page">
-<h2>addictive retro games</h2>
-
-<div class="gameBox">
-<h3>1. click the stars!</h3>
-<p>click as many stars as you can in 10 seconds ✨</p>
-<button onclick="startClicker()">start</button>
-<p id="clickScore"></p>
-<div id="clickArea" style="margin-top:10px;position:relative;height:150px;"></div>
-</div>
-
-<div class="gameBox">
-<h3>2. reaction test</h3>
-<p>click when the screen turns pink 💗</p>
-<button onclick="startReaction()">start</button>
-<p id="reactionResult"></p>
-</div>
-
-<div class="gameBox">
-<h3>3. color maze</h3>
-<p>use arrow keys to move @ to goal G 🌀</p>
-<pre id="maze" style="font-size:12px;"></pre>
-</div>
-
-<div class="gameBox">
-<h3>4. number memory</h3>
-<p>memorize the number and type it back correctly!</p>
-<button onclick="startMemory()">start</button>
-<p id="memoryNumber"></p>
-<input type="text" id="memoryInput" placeholder="type number">
-<p id="memoryResult"></p>
-</div>
-
-</div>
-
-<div id="yap" class="page">
-<h2>talk to robostar</h2>
-<input type="text" id="userInput" placeholder="say something...">
-<button onclick="talk()">send</button>
-<p id="botReply"></p>
-</div>
+<header>stardash is getting a big update!</header>
+<p>we're very sorry, the website will be unavailable for a short time while we work on a brand new update. it will be back in <strong>7-14 days</strong> and it will be even better once it's here! thanks for being patient and chill with us 🌌✨</p>
 
 <footer>
 &copy; 2026 StarDash <br>
@@ -191,149 +92,7 @@ for(let i=0;i<100;i++){
   star.style.animationDuration=1+Math.random()*3+'s';
   starsContainer.appendChild(star);
 }
-
-// page nav
-function showPage(id){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-}
-
-// art doodle
-const canvas=document.getElementById('artCanvas');
-const ctx=canvas.getContext('2d');
-let drawing=false;
-function getMousePos(e){
-  const rect=canvas.getBoundingClientRect();
-  return {x:e.clientX-rect.left,y:e.clientY-rect.top};
-}
-canvas.addEventListener('mousedown', e=>{
-  drawing=true;
-  const pos=getMousePos(e);
-  ctx.beginPath();
-  ctx.moveTo(pos.x,pos.y);
-});
-canvas.addEventListener('mousemove', e=>{
-  if(!drawing) return;
-  const pos=getMousePos(e);
-  ctx.lineTo(pos.x,pos.y);
-  ctx.strokeStyle='#ff6eb4';
-  ctx.lineWidth=3;
-  ctx.stroke();
-});
-canvas.addEventListener('mouseup', ()=>drawing=false);
-canvas.addEventListener('mouseleave', ()=>drawing=false);
-function clearCanvas(){ctx.clearRect(0,0,canvas.width,canvas.height);}
-
-// yap chatbot
-function talk(){
-  const input=document.getElementById('userInput').value.toLowerCase();
-  const reply=document.getElementById('botReply');
-  if(input.includes('hello')||input.includes('hi')){
-    reply.innerText='hey there, welcome to stardash ✨';
-  }else if(input.includes('bored')){
-    reply.innerText='dont worry, just doodle or play a game 😎';
-  }else{
-    reply.innerText='hmm... interesting 😏';
-  }
-  document.getElementById('userInput').value='';
-}
-
-// clicker game
-let clickScore=0;
-function startClicker(){
-  clickScore=0;
-  const area=document.getElementById('clickArea');
-  area.innerHTML='';
-  for(let i=0;i<30;i++){
-    let star=document.createElement('div');
-    star.style.width=star.style.height='15px';
-    star.style.background='yellow';
-    star.style.borderRadius='50%';
-    star.style.position='absolute';
-    star.style.top=Math.random()*130+'px';
-    star.style.left=Math.random()*570+'px';
-    star.style.cursor='pointer';
-    star.onclick=()=>{clickScore++; star.remove(); document.getElementById('clickScore').innerText='score: '+clickScore;}
-    area.appendChild(star);
-  }
-  setTimeout(()=>{alert('time up! score: '+clickScore); area.innerHTML='';},10000);
-}
-
-// reaction game
-function startReaction(){
-  const result=document.getElementById('reactionResult');
-  result.innerText='wait for it...';
-  document.body.style.background='#1b0b3b';
-  const delay=1000+Math.random()*3000;
-  setTimeout(()=>{
-    document.body.style.background='#ff6eb4';
-    const start=Date.now();
-    document.body.onclick=function(){
-      const time=Date.now()-start;
-      result.innerText='your reaction: '+time+'ms';
-      document.body.style.background='#1b0b3b';
-      document.body.onclick=null;
-    }
-  },delay);
-}
-
-// maze game
-const mazeMap=[
-'##########',
-'#@   #  #',
-'# ## # ##',
-'#    #  #',
-'####   ##',
-'#      G#',
-'#########'
-];
-let playerPos={x:1,y:1};
-const mazeEl=document.getElementById('maze');
-function renderMaze(){
-  let display='';
-  for(let y=0;y<mazeMap.length;y++){
-    for(let x=0;x<mazeMap[y].length;x++){
-      if(x==playerPos.x && y==playerPos.y) display+='@';
-      else display+=mazeMap[y][x];
-    }
-    display+='\n';
-  }
-  mazeEl.innerText=display;
-}
-document.addEventListener('keydown', e=>{
-  let newX=playerPos.x,newY=playerPos.y;
-  if(e.key==='ArrowUp') newY--;
-  if(e.key==='ArrowDown') newY++;
-  if(e.key==='ArrowLeft') newX--;
-  if(e.key==='ArrowRight') newX++;
-  if(mazeMap[newY][newX]!=='#'){
-    playerPos.x=newX; playerPos.y=newY;
-    renderMaze();
-    if(mazeMap[newY][newX]==='G') alert('you escaped the maze! 🎉');
-  }
-});
-renderMaze();
-
-// number memory game
-function startMemory(){
-  const numEl=document.getElementById('memoryNumber');
-  const inputEl=document.getElementById('memoryInput');
-  const resultEl=document.getElementById('memoryResult');
-  const randomNum=Math.floor(1000+Math.random()*9000);
-  numEl.innerText='memorize: '+randomNum;
-  resultEl.innerText='';
-  inputEl.value='';
-  inputEl.style.display='none';
-  setTimeout(()=>{
-    numEl.innerText='';
-    inputEl.style.display='inline-block';
-    inputEl.focus();
-    inputEl.onchange=function(){
-      if(inputEl.value==randomNum) resultEl.innerText='correct! 🎉';
-      else resultEl.innerText='wrong 😢 it was '+randomNum;
-    }
-  },3000);
-}
 </script>
+
 </body>
 </html>
