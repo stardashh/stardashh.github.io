@@ -10,7 +10,7 @@
 body {
   margin:0;
   font-family:'Press Start 2P', monospace;
-  background: #1b0b3b;
+  background:#1b0b3b;
   color:#fff;
   display:flex;
   flex-direction:column;
@@ -18,32 +18,29 @@ body {
   align-items:center;
   min-height:100vh;
   text-align:center;
+  overflow:hidden;
 }
 
-header{
+h1{
   font-size:2em;
   color:#ff6eb4;
   margin-bottom:20px;
-  text-shadow: 0 0 10px #ff85d0;
+  text-shadow:0 0 10px #ff85d0, 0 0 20px #ff6eb4;
+  animation:glow 1.5s infinite alternate;
 }
 
 p{
   font-size:0.8em;
   max-width:500px;
   line-height:1.5;
-}
-
-button{
-  margin-top:20px;
-  background:#ff6eb4;
   color:#fff;
-  border:none;
-  padding:10px 15px;
-  cursor:pointer;
+  text-shadow:0 0 5px #ff6eb4;
 }
 
-button:hover{
-  background:#ff85d0;
+footer{
+  margin-top:30px;
+  font-size:0.7em;
+  color:#fff;
 }
 
 .stars{
@@ -62,18 +59,25 @@ button:hover{
   opacity:0.8;
   animation:twinkle 2s infinite;
 }
+
 @keyframes twinkle{
   0%,100%{opacity:0.8;}
   50%{opacity:0.2;}
 }
+
+@keyframes glow{
+  from{text-shadow:0 0 10px #ff85d0,0 0 20px #ff6eb4;}
+  to{text-shadow:0 0 20px #ff85d0,0 0 40px #ff6eb4;}
+}
+
 </style>
 </head>
 <body>
 
 <div class="stars" id="stars"></div>
 
-<header>stardash is getting a big update!</header>
-<p>we're very sorry, the website will be unavailable for a short time while we work on a brand new update. it will be back in <strong>7-14 days</strong> and it will be even better once it's here! thanks for being patient and chill with us 🌌✨</p>
+<h1>what are you doing here?</h1>
+<p>stardash is getting a big update! the website will be back in april 2026. thanks for being patient 🌌✨</p>
 
 <footer>
 &copy; 2026 StarDash <br>
