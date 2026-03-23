@@ -1,102 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>StarDash Update</title>
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
-
-body {
-  margin:0;
-  font-family:'Press Start 2P', monospace;
-  background:#1b0b3b;
-  color:#fff;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  min-height:100vh;
-  text-align:center;
-  overflow:hidden;
-}
-
-h1{
-  font-size:2em;
-  color:#ff6eb4;
-  margin-bottom:20px;
-  text-shadow:0 0 10px #ff85d0, 0 0 20px #ff6eb4;
-  animation:glow 1.5s infinite alternate;
-}
-
-p{
-  font-size:0.8em;
-  max-width:500px;
-  line-height:1.5;
-  color:#fff;
-  text-shadow:0 0 5px #ff6eb4;
-}
-
-footer{
-  margin-top:30px;
-  font-size:0.7em;
-  color:#fff;
-}
-
-.stars{
-  position:fixed;
-  width:100%;
-  height:100%;
-  background:transparent;
-  z-index:-1;
-}
-.star{
-  position:absolute;
-  width:2px;
-  height:2px;
-  background:white;
-  border-radius:50%;
-  opacity:0.8;
-  animation:twinkle 2s infinite;
-}
-
-@keyframes twinkle{
-  0%,100%{opacity:0.8;}
-  50%{opacity:0.2;}
-}
-
-@keyframes glow{
-  from{text-shadow:0 0 10px #ff85d0,0 0 20px #ff6eb4;}
-  to{text-shadow:0 0 20px #ff85d0,0 0 40px #ff6eb4;}
-}
-
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>stardash closed</title>
+    <style>
+        body {
+            background: #0a0a0a;
+            color: #ffffff;
+            font-family: 'arial', sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+            padding: 20px;
+        }
+        h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+            color: #ffcc00;
+        }
+        p {
+            font-size: 1.5em;
+            line-height: 1.6;
+        }
+        .note {
+            margin-top: 30px;
+            font-size: 1em;
+            color: #cccccc;
+        }
+    </style>
 </head>
 <body>
-
-<div class="stars" id="stars"></div>
-
-<h1>NEW UPDATE!!!</h1>
-<p>stardash is getting a big update! the website will be back in april 2026. thanks for being patient 🌌✨</p>
-
-<footer>
-&copy; 2026 StarDash <br>
-go follow my tiktok: @jshctz.mp3
-</footer>
-
-<script>
-// stars background
-const starsContainer=document.getElementById('stars');
-for(let i=0;i<100;i++){
-  let star=document.createElement('div');
-  star.className='star';
-  star.style.top=Math.random()*100+'%';
-  star.style.left=Math.random()*100+'%';
-  star.style.width=star.style.height=Math.random()*2+1+'px';
-  star.style.animationDuration=1+Math.random()*3+'s';
-  starsContainer.appendChild(star);
-}
-</script>
-
+    <h1>stardash has closed</h1>
+    <p>thank you to everyone who visited and supported stardash.<br>
+    a new website may be created in the future, stay tuned!</p>
+    <div class="note">we really appreciate your support 💛</div>
 </body>
 </html>
