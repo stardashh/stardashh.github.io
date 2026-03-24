@@ -1,424 +1,77 @@
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>stardash</title>
-
+<title>Loading Animation</title>
 <style>
+  body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: sans-serif;
+  }
 
-body{
-margin:0;
-font-family:arial;
-background:black;
-color:white;
-text-align:center;
-overflow-x:hidden;
-}
+  /* loading screen */
+  #loadingScreen {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    background: #fff;
+  }
 
-/* stars */
+  .spinner {
+    border: 6px solid #f3f3f3;
+    border-top: 6px solid #555;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 20px;
+  }
 
-.stars{
-position:fixed;
-width:100%;
-height:100%;
-background:transparent;
-box-shadow:
-10vw 20vh #fff,
-30vw 80vh #fff,
-70vw 40vh #fff,
-90vw 60vh #fff,
-50vw 10vh #fff,
-80vw 30vh #fff,
-60vw 70vh #fff,
-20vw 50vh #fff;
-animation:twinkle 4s infinite alternate;
-}
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
 
-@keyframes twinkle{
-from{opacity:.3}
-to{opacity:1}
-}
+  /* error screen */
+  #errorScreen {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    background: red;
+    color: white;
+    text-align: center;
+    padding: 20px;
+  }
 
-/* intro */
-
-#intro{
-position:fixed;
-width:100%;
-height:100%;
-background:black;
-display:flex;
-align-items:center;
-justify-content:center;
-flex-direction:column;
-z-index:10;
-}
-
-.glitch{
-font-size:50px;
-color:#0ff;
-text-shadow:2px 2px #f0f,-2px -2px #0ff;
-animation:glitch 1s infinite;
-}
-
-@keyframes glitch{
-0%{transform:translate(0)}
-25%{transform:translate(-2px,2px)}
-50%{transform:translate(2px,-2px)}
-75%{transform:translate(-1px,1px)}
-100%{transform:translate(0)}
-}
-
-/* navigation */
-
-nav{
-display:flex;
-flex-wrap:wrap;
-justify-content:center;
-gap:8px;
-padding:10px;
-}
-
-/* buttons */
-
-button{
-background:#050520;
-border:2px solid #0ff;
-color:#0ff;
-padding:14px 18px;
-margin:4px;
-cursor:pointer;
-box-shadow:0 0 10px #0ff;
-font-size:16px;
-border-radius:8px;
-}
-
-button:hover{
-background:#0ff;
-color:black;
-}
-
-header{
-font-size:34px;
-margin:20px;
-text-shadow:0 0 10px #0ff;
-}
-
-.page{
-display:none;
-padding:20px;
-}
-
-/* canvas mobile */
-
-canvas{
-background:white;
-border:2px solid #f0f;
-box-shadow:0 0 10px #f0f;
-max-width:90%;
-height:auto;
-}
-
-footer{
-margin-top:40px;
-font-size:14px;
-color:#aaa;
-}
-
-.shutdown{
-color:#ff4444;
-text-shadow:0 0 10px red;
-}
-
-.trail{
-position:fixed;
-width:6px;
-height:6px;
-background:#0ff;
-border-radius:50%;
-pointer-events:none;
-box-shadow:0 0 10px #0ff;
-}
-
-textarea{
-width:90%;
-height:200px;
-background:#050520;
-color:white;
-border:2px solid #f0f;
-}
-
+  #errorScreen p {
+    font-size: 18px;
+    line-height: 1.5;
+  }
 </style>
 </head>
-
 <body>
 
-<div class="stars"></div>
-
-<div id="intro">
-<div class="glitch">stardash</div>
-<p>neon internet arcade</p>
-<button onclick="startSite()">enter</button>
+<div id="loadingScreen">
+  <div class="spinner"></div>
+  <p>Loading...</p>
 </div>
 
-<header>stardash</header>
-
-<nav>
-<button onclick="showPage('home')">home</button>
-<button onclick="showPage('login')">login</button>
-<button onclick="showPage('doodle')">doodle</button>
-<button onclick="showPage('games')">games</button>
-<button onclick="showPage('music')">music</button>
-<button onclick="showPage('chat')">chat</button>
-<button onclick="enterVent()">vent</button>
-</nav>
-
-<div id="home" class="page" style="display:block">
-
-<h2>welcome to stardash</h2>
-
-<h3>leaderboard</h3>
-
-<p>1. cosmic — 200</p>
-<p>2. stargamer — 120</p>
-<p>3. pixel — 90</p>
-
+<div id="errorScreen">
+  <p>OOPS!!! something went wrong! please refresh the page and try again.<br>if it keeps happening, contact the website developer on tiktok @jshctz.mp4 for help.<br>thanks for your patience!</p>
 </div>
-
-<div id="login" class="page">
-
-<h2>login</h2>
-
-<input id="username" placeholder="username"><br><br>
-
-<button onclick="login()">login</button>
-
-<p id="loginMsg"></p>
-
-</div>
-
-<div id="doodle" class="page">
-
-<h2>doodle</h2>
-
-<canvas id="draw" width="300" height="200"></canvas><br>
-
-<button onclick="clearCanvas()">clear</button>
-<button onclick="saveDrawing()">save png</button>
-
-</div>
-
-<div id="games" class="page">
-
-<h2>arcade</h2>
-
-<button onclick="startCatch()">catch star</button>
-<button onclick="startSnake()">snake</button>
-<button onclick="startPong()">pong</button>
-<button onclick="startDodge()">dodge</button>
-
-<br><br>
-
-<canvas id="gameCanvas" width="320" height="220"></canvas>
-
-</div>
-
-<div id="music" class="page">
-
-<h2>music</h2>
-
-<audio controls>
-<source src="https://cdn.pixabay.com/audio/2022/03/15/audio_9f6f0d.mp3">
-</audio>
-
-</div>
-
-<div id="chat" class="page">
-
-<h2>chat room</h2>
-
-<div id="chatBox" style="height:200px;overflow:auto;border:1px solid #0ff;"></div>
-
-<input id="chatInput">
-<button onclick="sendChat()">send</button>
-
-</div>
-
-<div id="vent" class="page">
-
-<h2>vent</h2>
-
-<textarea></textarea>
-
-</div>
-
-<footer>
-page created by jshctz<br>
-tiktok: jshctz.mp4
-</footer>
 
 <script>
-
-/* intro */
-
-function startSite(){
-document.getElementById("intro").style.display="none"
-}
-
-/* pages */
-
-function showPage(id){
-document.querySelectorAll(".page").forEach(p=>p.style.display="none")
-document.getElementById(id).style.display="block"
-}
-
-/* login */
-
-function login(){
-let u=document.getElementById("username").value
-document.getElementById("loginMsg").innerText="welcome "+u
-}
-
-/* vent */
-
-function enterVent(){
-let ok=confirm("StarDash doesn't collect data and cookies, that means nobody inside AND outside StarDash can see what you write, draw or play.")
-if(ok)showPage("vent")
-}
-
-/* doodle mobile */
-
-let canvas=document.getElementById("draw")
-let ctx=canvas.getContext("2d")
-let drawing=false
-
-function startDraw(e){
-drawing=true
-draw(e)
-}
-
-function endDraw(){
-drawing=false
-ctx.beginPath()
-}
-
-function draw(e){
-if(!drawing)return
-
-let rect=canvas.getBoundingClientRect()
-
-let x=(e.touches?e.touches[0].clientX:e.clientX)-rect.left
-let y=(e.touches?e.touches[0].clientY:e.clientY)-rect.top
-
-ctx.lineWidth=3
-ctx.lineCap="round"
-ctx.lineTo(x,y)
-ctx.stroke()
-ctx.beginPath()
-ctx.moveTo(x,y)
-}
-
-canvas.addEventListener("mousedown",startDraw)
-canvas.addEventListener("mouseup",endDraw)
-canvas.addEventListener("mousemove",draw)
-
-canvas.addEventListener("touchstart",startDraw)
-canvas.addEventListener("touchend",endDraw)
-canvas.addEventListener("touchmove",draw)
-
-/* save */
-
-function clearCanvas(){
-ctx.clearRect(0,0,canvas.width,canvas.height)
-}
-
-function saveDrawing(){
-let a=document.createElement("a")
-a.download="doodle.png"
-a.href=canvas.toDataURL()
-a.click()
-}
-
-/* cursor trail */
-
-document.addEventListener("mousemove",e=>{
-let t=document.createElement("div")
-t.className="trail"
-t.style.left=e.pageX+"px"
-t.style.top=e.pageY+"px"
-document.body.appendChild(t)
-setTimeout(()=>t.remove(),500)
-})
-
-/* chat */
-
-function sendChat(){
-let msg=document.getElementById("chatInput").value
-let box=document.getElementById("chatBox")
-box.innerHTML+="<p>"+msg+"</p>"
-}
-
-/* games */
-
-let g=document.getElementById("gameCanvas")
-let c=g.getContext("2d")
-
-function startCatch(){
-g.onclick=function(){
-let x=Math.random()*300
-let y=Math.random()*200
-c.clearRect(0,0,320,220)
-c.fillStyle="yellow"
-c.fillRect(x,y,20,20)
-}
-}
-
-function startSnake(){
-let x=100
-function loop(){
-c.clearRect(0,0,320,220)
-x+=2
-c.fillStyle="lime"
-c.fillRect(x,100,20,20)
-requestAnimationFrame(loop)
-}
-loop()
-}
-
-function startPong(){
-let ball={x:160,y:110,vx:3,vy:3}
-function loop(){
-c.clearRect(0,0,320,220)
-ball.x+=ball.vx
-ball.y+=ball.vy
-if(ball.x<0||ball.x>320)ball.vx*=-1
-if(ball.y<0||ball.y>220)ball.vy*=-1
-c.fillRect(ball.x,ball.y,10,10)
-requestAnimationFrame(loop)
-}
-loop()
-}
-
-function startDodge(){
-let y=0
-function loop(){
-c.clearRect(0,0,320,220)
-y+=4
-c.fillStyle="red"
-c.fillRect(160,y,20,20)
-requestAnimationFrame(loop)
-}
-loop()
-}
-
-/* secret */
-
-document.addEventListener("keydown",e=>{
-if(e.key==="s"){
-alert("secret unlocked 👀 stardash hidden mode")
-}
-})
-
+  setTimeout(() => {
+    document.getElementById('loadingScreen').style.display = 'none';
+    document.getElementById('errorScreen').style.display = 'flex';
+  }, 5000); // 5 seconds
 </script>
 
 </body>
