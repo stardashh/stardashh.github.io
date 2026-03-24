@@ -2,6 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>stardash</title>
 
 <style>
@@ -54,7 +55,7 @@ z-index:10;
 }
 
 .glitch{
-font-size:60px;
+font-size:50px;
 color:#0ff;
 text-shadow:2px 2px #f0f,-2px -2px #0ff;
 animation:glitch 1s infinite;
@@ -68,14 +69,28 @@ animation:glitch 1s infinite;
 100%{transform:translate(0)}
 }
 
+/* navigation */
+
+nav{
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+gap:8px;
+padding:10px;
+}
+
+/* buttons */
+
 button{
 background:#050520;
 border:2px solid #0ff;
 color:#0ff;
-padding:10px 20px;
-margin:5px;
+padding:14px 18px;
+margin:4px;
 cursor:pointer;
 box-shadow:0 0 10px #0ff;
+font-size:16px;
+border-radius:8px;
 }
 
 button:hover{
@@ -84,7 +99,7 @@ color:black;
 }
 
 header{
-font-size:40px;
+font-size:34px;
 margin:20px;
 text-shadow:0 0 10px #0ff;
 }
@@ -94,10 +109,14 @@ display:none;
 padding:20px;
 }
 
+/* canvas mobile */
+
 canvas{
 background:white;
 border:2px solid #f0f;
 box-shadow:0 0 10px #f0f;
+max-width:90%;
+height:auto;
 }
 
 footer{
@@ -119,6 +138,14 @@ background:#0ff;
 border-radius:50%;
 pointer-events:none;
 box-shadow:0 0 10px #0ff;
+}
+
+textarea{
+width:90%;
+height:200px;
+background:#050520;
+color:white;
+border:2px solid #f0f;
 }
 
 </style>
@@ -146,15 +173,9 @@ box-shadow:0 0 10px #0ff;
 <button onclick="enterVent()">vent</button>
 </nav>
 
-<!-- home -->
-
 <div id="home" class="page" style="display:block">
 
 <h2>welcome to stardash</h2>
-
-<div class="shutdown">
-website shutting down 26 april 2026
-</div>
 
 <h3>leaderboard</h3>
 
@@ -163,8 +184,6 @@ website shutting down 26 april 2026
 <p>3. pixel — 90</p>
 
 </div>
-
-<!-- login -->
 
 <div id="login" class="page">
 
@@ -178,20 +197,16 @@ website shutting down 26 april 2026
 
 </div>
 
-<!-- doodle -->
-
 <div id="doodle" class="page">
 
 <h2>doodle</h2>
 
-<canvas id="draw" width="500" height="300"></canvas><br>
+<canvas id="draw" width="300" height="200"></canvas><br>
 
 <button onclick="clearCanvas()">clear</button>
 <button onclick="saveDrawing()">save png</button>
 
 </div>
-
-<!-- games -->
 
 <div id="games" class="page">
 
@@ -202,11 +217,11 @@ website shutting down 26 april 2026
 <button onclick="startPong()">pong</button>
 <button onclick="startDodge()">dodge</button>
 
-<canvas id="gameCanvas" width="400" height="300"></canvas>
+<br><br>
+
+<canvas id="gameCanvas" width="320" height="220"></canvas>
 
 </div>
-
-<!-- music -->
 
 <div id="music" class="page">
 
@@ -217,8 +232,6 @@ website shutting down 26 april 2026
 </audio>
 
 </div>
-
-<!-- chat -->
 
 <div id="chat" class="page">
 
@@ -231,13 +244,11 @@ website shutting down 26 april 2026
 
 </div>
 
-<!-- vent -->
-
 <div id="vent" class="page">
 
 <h2>vent</h2>
 
-<textarea style="width:80%;height:200px;background:#050520;color:white;border:2px solid #f0f;"></textarea>
+<textarea></textarea>
 
 </div>
 
@@ -275,24 +286,47 @@ let ok=confirm("StarDash doesn't collect data and cookies, that means nobody ins
 if(ok)showPage("vent")
 }
 
-/* doodle */
+/* doodle mobile */
 
 let canvas=document.getElementById("draw")
 let ctx=canvas.getContext("2d")
 let drawing=false
 
-canvas.onmousedown=()=>drawing=true
-canvas.onmouseup=()=>drawing=false
+function startDraw(e){
+drawing=true
+draw(e)
+}
 
-canvas.onmousemove=function(e){
+function endDraw(){
+drawing=false
+ctx.beginPath()
+}
+
+function draw(e){
 if(!drawing)return
+
+let rect=canvas.getBoundingClientRect()
+
+let x=(e.touches?e.touches[0].clientX:e.clientX)-rect.left
+let y=(e.touches?e.touches[0].clientY:e.clientY)-rect.top
+
 ctx.lineWidth=3
 ctx.lineCap="round"
-ctx.lineTo(e.offsetX,e.offsetY)
+ctx.lineTo(x,y)
 ctx.stroke()
 ctx.beginPath()
-ctx.moveTo(e.offsetX,e.offsetY)
+ctx.moveTo(x,y)
 }
+
+canvas.addEventListener("mousedown",startDraw)
+canvas.addEventListener("mouseup",endDraw)
+canvas.addEventListener("mousemove",draw)
+
+canvas.addEventListener("touchstart",startDraw)
+canvas.addEventListener("touchend",endDraw)
+canvas.addEventListener("touchmove",draw)
+
+/* save */
 
 function clearCanvas(){
 ctx.clearRect(0,0,canvas.width,canvas.height)
@@ -331,34 +365,34 @@ let c=g.getContext("2d")
 
 function startCatch(){
 g.onclick=function(){
-let x=Math.random()*380
-let y=Math.random()*280
-c.clearRect(0,0,400,300)
+let x=Math.random()*300
+let y=Math.random()*200
+c.clearRect(0,0,320,220)
 c.fillStyle="yellow"
 c.fillRect(x,y,20,20)
 }
 }
 
 function startSnake(){
-let x=200
+let x=100
 function loop(){
-c.clearRect(0,0,400,300)
+c.clearRect(0,0,320,220)
 x+=2
 c.fillStyle="lime"
-c.fillRect(x,150,20,20)
+c.fillRect(x,100,20,20)
 requestAnimationFrame(loop)
 }
 loop()
 }
 
 function startPong(){
-let ball={x:200,y:150,vx:3,vy:3}
+let ball={x:160,y:110,vx:3,vy:3}
 function loop(){
-c.clearRect(0,0,400,300)
+c.clearRect(0,0,320,220)
 ball.x+=ball.vx
 ball.y+=ball.vy
-if(ball.x<0||ball.x>400)ball.vx*=-1
-if(ball.y<0||ball.y>300)ball.vy*=-1
+if(ball.x<0||ball.x>320)ball.vx*=-1
+if(ball.y<0||ball.y>220)ball.vy*=-1
 c.fillRect(ball.x,ball.y,10,10)
 requestAnimationFrame(loop)
 }
@@ -368,16 +402,16 @@ loop()
 function startDodge(){
 let y=0
 function loop(){
-c.clearRect(0,0,400,300)
+c.clearRect(0,0,320,220)
 y+=4
 c.fillStyle="red"
-c.fillRect(200,y,20,20)
+c.fillRect(160,y,20,20)
 requestAnimationFrame(loop)
 }
 loop()
 }
 
-/* secret easter egg */
+/* secret */
 
 document.addEventListener("keydown",e=>{
 if(e.key==="s"){
