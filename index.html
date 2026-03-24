@@ -1,77 +1,55 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Loading Animation</title>
+<title>Big Update Coming Soon</title>
 <style>
   body, html {
     margin: 0;
     padding: 0;
     height: 100%;
-    font-family: sans-serif;
-  }
-
-  /* loading screen */
-  #loadingScreen {
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 100%;
-    background: #fff;
-  }
-
-  .spinner {
-    border: 6px solid #f3f3f3;
-    border-top: 6px solid #555;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    animation: spin 1s linear infinite;
-    margin-bottom: 20px;
-  }
-
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
-
-  /* error screen */
-  #errorScreen {
-    display: none;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    background: red;
+    background: black;
     color: white;
-    text-align: center;
-    padding: 20px;
+    font-family: Arial, sans-serif;
+    font-size: 3em;
   }
 
-  #errorScreen p {
-    font-size: 18px;
-    line-height: 1.5;
+  #overlay {
+    text-align: center;
+  }
+
+  .fade {
+    animation: fadeinout 1s linear;
+  }
+
+  @keyframes fadeinout {
+    0% { opacity: 0; }
+    20% { opacity: 1; }
+    80% { opacity: 1; }
+    100% { opacity: 0; }
   }
 </style>
 </head>
 <body>
 
-<div id="loadingScreen">
-  <div class="spinner"></div>
-  <p>Loading...</p>
-</div>
-
-<div id="errorScreen">
-  <p>OOPS!!! something went wrong! please refresh the page and try again.<br>if it keeps happening, contact the website developer on tiktok @jshctz.mp4 for help.<br>thanks for your patience!</p>
-</div>
+<div id="overlay">SUPER</div>
 
 <script>
-  setTimeout(() => {
-    document.getElementById('loadingScreen').style.display = 'none';
-    document.getElementById('errorScreen').style.display = 'flex';
-  }, 5000); // 5 seconds
+  const words = ["SUPER", "DUPER", "BIG", "UPDATE", "COMING", "SOON!"];
+  let index = 0;
+  const overlay = document.getElementById("overlay");
+
+  setInterval(() => {
+    index = (index + 1) % words.length;
+    overlay.textContent = words[index];
+    overlay.classList.remove("fade");
+    void overlay.offsetWidth; // restart animation
+    overlay.classList.add("fade");
+  }, 1000);
 </script>
 
 </body>
