@@ -1,42 +1,391 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>stardash closed</title>
-    <style>
-        body {
-            background: #0a0a0a;
-            color: #ffffff;
-            font-family: 'arial', sans-serif;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            text-align: center;
-            padding: 20px;
-        }
-        h1 {
-            font-size: 3em;
-            margin-bottom: 20px;
-            color: #ffcc00;
-        }
-        p {
-            font-size: 1.5em;
-            line-height: 1.6;
-        }
-        .note {
-            margin-top: 30px;
-            font-size: 1em;
-            color: #cccccc;
-        }
-    </style>
+<meta charset="UTF-8">
+<title>stardash</title>
+
+<style>
+
+body{
+margin:0;
+font-family:arial;
+background:black;
+color:white;
+text-align:center;
+overflow-x:hidden;
+}
+
+/* stars */
+
+.stars{
+position:fixed;
+width:100%;
+height:100%;
+background:transparent;
+box-shadow:
+10vw 20vh #fff,
+30vw 80vh #fff,
+70vw 40vh #fff,
+90vw 60vh #fff,
+50vw 10vh #fff,
+80vw 30vh #fff,
+60vw 70vh #fff,
+20vw 50vh #fff;
+animation:twinkle 4s infinite alternate;
+}
+
+@keyframes twinkle{
+from{opacity:.3}
+to{opacity:1}
+}
+
+/* intro */
+
+#intro{
+position:fixed;
+width:100%;
+height:100%;
+background:black;
+display:flex;
+align-items:center;
+justify-content:center;
+flex-direction:column;
+z-index:10;
+}
+
+.glitch{
+font-size:60px;
+color:#0ff;
+text-shadow:2px 2px #f0f,-2px -2px #0ff;
+animation:glitch 1s infinite;
+}
+
+@keyframes glitch{
+0%{transform:translate(0)}
+25%{transform:translate(-2px,2px)}
+50%{transform:translate(2px,-2px)}
+75%{transform:translate(-1px,1px)}
+100%{transform:translate(0)}
+}
+
+button{
+background:#050520;
+border:2px solid #0ff;
+color:#0ff;
+padding:10px 20px;
+margin:5px;
+cursor:pointer;
+box-shadow:0 0 10px #0ff;
+}
+
+button:hover{
+background:#0ff;
+color:black;
+}
+
+header{
+font-size:40px;
+margin:20px;
+text-shadow:0 0 10px #0ff;
+}
+
+.page{
+display:none;
+padding:20px;
+}
+
+canvas{
+background:white;
+border:2px solid #f0f;
+box-shadow:0 0 10px #f0f;
+}
+
+footer{
+margin-top:40px;
+font-size:14px;
+color:#aaa;
+}
+
+.shutdown{
+color:#ff4444;
+text-shadow:0 0 10px red;
+}
+
+.trail{
+position:fixed;
+width:6px;
+height:6px;
+background:#0ff;
+border-radius:50%;
+pointer-events:none;
+box-shadow:0 0 10px #0ff;
+}
+
+</style>
 </head>
+
 <body>
-    <h1>stardash has closed</h1>
-    <p>thank you to everyone who visited and supported stardash.<br>
-    a new website may be created in the future, stay tuned!</p>
-    <div class="note">we really appreciate your support 💛</div>
+
+<div class="stars"></div>
+
+<div id="intro">
+<div class="glitch">stardash</div>
+<p>neon internet arcade</p>
+<button onclick="startSite()">enter</button>
+</div>
+
+<header>stardash</header>
+
+<nav>
+<button onclick="showPage('home')">home</button>
+<button onclick="showPage('login')">login</button>
+<button onclick="showPage('doodle')">doodle</button>
+<button onclick="showPage('games')">games</button>
+<button onclick="showPage('music')">music</button>
+<button onclick="showPage('chat')">chat</button>
+<button onclick="enterVent()">vent</button>
+</nav>
+
+<!-- home -->
+
+<div id="home" class="page" style="display:block">
+
+<h2>welcome to stardash</h2>
+
+<div class="shutdown">
+website shutting down 26 april 2026
+</div>
+
+<h3>leaderboard</h3>
+
+<p>1. cosmic — 200</p>
+<p>2. stargamer — 120</p>
+<p>3. pixel — 90</p>
+
+</div>
+
+<!-- login -->
+
+<div id="login" class="page">
+
+<h2>login</h2>
+
+<input id="username" placeholder="username"><br><br>
+
+<button onclick="login()">login</button>
+
+<p id="loginMsg"></p>
+
+</div>
+
+<!-- doodle -->
+
+<div id="doodle" class="page">
+
+<h2>doodle</h2>
+
+<canvas id="draw" width="500" height="300"></canvas><br>
+
+<button onclick="clearCanvas()">clear</button>
+<button onclick="saveDrawing()">save png</button>
+
+</div>
+
+<!-- games -->
+
+<div id="games" class="page">
+
+<h2>arcade</h2>
+
+<button onclick="startCatch()">catch star</button>
+<button onclick="startSnake()">snake</button>
+<button onclick="startPong()">pong</button>
+<button onclick="startDodge()">dodge</button>
+
+<canvas id="gameCanvas" width="400" height="300"></canvas>
+
+</div>
+
+<!-- music -->
+
+<div id="music" class="page">
+
+<h2>music</h2>
+
+<audio controls>
+<source src="https://cdn.pixabay.com/audio/2022/03/15/audio_9f6f0d.mp3">
+</audio>
+
+</div>
+
+<!-- chat -->
+
+<div id="chat" class="page">
+
+<h2>chat room</h2>
+
+<div id="chatBox" style="height:200px;overflow:auto;border:1px solid #0ff;"></div>
+
+<input id="chatInput">
+<button onclick="sendChat()">send</button>
+
+</div>
+
+<!-- vent -->
+
+<div id="vent" class="page">
+
+<h2>vent</h2>
+
+<textarea style="width:80%;height:200px;background:#050520;color:white;border:2px solid #f0f;"></textarea>
+
+</div>
+
+<footer>
+page created by jshctz<br>
+tiktok: jshctz.mp4
+</footer>
+
+<script>
+
+/* intro */
+
+function startSite(){
+document.getElementById("intro").style.display="none"
+}
+
+/* pages */
+
+function showPage(id){
+document.querySelectorAll(".page").forEach(p=>p.style.display="none")
+document.getElementById(id).style.display="block"
+}
+
+/* login */
+
+function login(){
+let u=document.getElementById("username").value
+document.getElementById("loginMsg").innerText="welcome "+u
+}
+
+/* vent */
+
+function enterVent(){
+let ok=confirm("StarDash doesn't collect data and cookies, that means nobody inside AND outside StarDash can see what you write, draw or play.")
+if(ok)showPage("vent")
+}
+
+/* doodle */
+
+let canvas=document.getElementById("draw")
+let ctx=canvas.getContext("2d")
+let drawing=false
+
+canvas.onmousedown=()=>drawing=true
+canvas.onmouseup=()=>drawing=false
+
+canvas.onmousemove=function(e){
+if(!drawing)return
+ctx.lineWidth=3
+ctx.lineCap="round"
+ctx.lineTo(e.offsetX,e.offsetY)
+ctx.stroke()
+ctx.beginPath()
+ctx.moveTo(e.offsetX,e.offsetY)
+}
+
+function clearCanvas(){
+ctx.clearRect(0,0,canvas.width,canvas.height)
+}
+
+function saveDrawing(){
+let a=document.createElement("a")
+a.download="doodle.png"
+a.href=canvas.toDataURL()
+a.click()
+}
+
+/* cursor trail */
+
+document.addEventListener("mousemove",e=>{
+let t=document.createElement("div")
+t.className="trail"
+t.style.left=e.pageX+"px"
+t.style.top=e.pageY+"px"
+document.body.appendChild(t)
+setTimeout(()=>t.remove(),500)
+})
+
+/* chat */
+
+function sendChat(){
+let msg=document.getElementById("chatInput").value
+let box=document.getElementById("chatBox")
+box.innerHTML+="<p>"+msg+"</p>"
+}
+
+/* games */
+
+let g=document.getElementById("gameCanvas")
+let c=g.getContext("2d")
+
+function startCatch(){
+g.onclick=function(){
+let x=Math.random()*380
+let y=Math.random()*280
+c.clearRect(0,0,400,300)
+c.fillStyle="yellow"
+c.fillRect(x,y,20,20)
+}
+}
+
+function startSnake(){
+let x=200
+function loop(){
+c.clearRect(0,0,400,300)
+x+=2
+c.fillStyle="lime"
+c.fillRect(x,150,20,20)
+requestAnimationFrame(loop)
+}
+loop()
+}
+
+function startPong(){
+let ball={x:200,y:150,vx:3,vy:3}
+function loop(){
+c.clearRect(0,0,400,300)
+ball.x+=ball.vx
+ball.y+=ball.vy
+if(ball.x<0||ball.x>400)ball.vx*=-1
+if(ball.y<0||ball.y>300)ball.vy*=-1
+c.fillRect(ball.x,ball.y,10,10)
+requestAnimationFrame(loop)
+}
+loop()
+}
+
+function startDodge(){
+let y=0
+function loop(){
+c.clearRect(0,0,400,300)
+y+=4
+c.fillStyle="red"
+c.fillRect(200,y,20,20)
+requestAnimationFrame(loop)
+}
+loop()
+}
+
+/* secret easter egg */
+
+document.addEventListener("keydown",e=>{
+if(e.key==="s"){
+alert("secret unlocked 👀 stardash hidden mode")
+}
+})
+
+</script>
+
 </body>
 </html>
